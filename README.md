@@ -37,19 +37,12 @@ chmod +x ./gnfd-cmd
 
 ## Config Network
 
+By deafult the https://github.com/bnb-chain/greenfield-nft-migration/blob/main/nft-migrate/migrate-nft.py script will use greenfield testnet to store those NFT files. 
 
-Edit the config toml file at 
-```
-vim greenfield-nft-migration/nft-migrate/config.toml
-```
-And input the following testnet network and save:
+You can edit https://github.com/bnb-chain/greenfield-nft-migration/blob/main/nft-migrate/migrate-nft.py#L12-L22 if you want to use greenfield mainnet
 
-```
-rpcAddr = "https://gnfd-testnet-fullnode-tendermint-us.bnbchain.org:443"
-chainId = "greenfield_5600-1"
-```
 
-## Impport Account and Generating Keystore
+## Import Account and Generating Keystore
 
 Reference: https://docs.bnbchain.org/greenfield-docs/docs/tutorials/cli/file-management/overview#impport-account-and-generating-keystore
 
@@ -70,10 +63,36 @@ Run the nft migration python script:
 
 Get your NFT contact , we take 0xA5FDb0822bf82De3315f1766574547115E99016f as an example. It's an ERC721 contract deployed on BSC Testnet. 
 
+Before you run the example, make sure your directory look like:
+![first](img/1.png)
+```
+(.venv-nft) ➜  nft-migrate git:(main)  # you activate the python virtrual environment
+(.venv-nft) ➜  nft-migrate git:(main) ✗ pwd
+/home/xxxxxxxx/some_dir/greenfield-nft-migration/nft-migrate   
+(.venv-nft) ➜  nft-migrate git:(main) ✗ ls -lah
+total 108736
+drwxr-xr-x@ 8   256B Dec 11 21:45 .
+drwxr-xr-x  8   256B Dec 11 21:46 ..
+-rwxr-xr-x  1    52M Nov 23 18:25 gnfd-cmd   # the gnfd commnd tool you download from offcial repo release page
+-rw-r--r--  1    64B Dec 11 21:17 key.txt    # the private key of your test account address, by using it you just imported your account and generated Keystore
+-rw-r--r--@ 1    16K Dec 11 21:39 migrate-nft.py # the nft migration python example
+-rw-r--r--  1     0B Dec 11 21:27 password.txt # the password you used when importing your account for gnfd cmd tool.
+-rw-r--r--  1    15B Dec 11 20:56 requirements.txt 
+```
+
+
 Run
 ```
 python3 migrate-nft.py --contract=0xA5FDb0822bf82De3315f1766574547115E99016f
 
 ```
 
+And you will see 
+1. Firstly it script will download NFT files after parsing the contract:
+   ![second](img/2.png)
 
+2. It will invooke greenfield cmd tool to create bucket and upload those NFTs into greenfield chain and storage providers
+    ![third](img/3.png)
+   
+3. After all NFTs are migrated, you can also check them in dcellar:
+     ![fourth](img/4.png)
